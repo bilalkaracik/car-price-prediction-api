@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify
 import joblib
+from flask import Flask, request, jsonify
+from xgboost import XGBRegressor
 
 app = Flask(__name__)
 
-# Araç tahmini için modelin yüklenmmesi
-model = joblib.load("")
+# XGBoost modelinizi yükleme
+model = joblib.load("xgboost_tuned_model.pkl")
 
 @app.route('/')
 def root():
@@ -14,10 +15,12 @@ def root():
 def predict():
     try:
         data = request.get_json()
-        text = data['text']
-
+        # Gelen veriyi modele uygun hale getirin, örneğin:
+        # text = data['text']
+        # dtest = xgb.DMatrix([[text]])
+        
         # Tahmin
-        prediction = model.predict([text])[0]
+        prediction = model.predict(dtest)[0]
 
         response = {
             'text': text,

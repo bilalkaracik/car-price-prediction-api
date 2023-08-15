@@ -4,7 +4,7 @@ from xgboost import XGBRegressor
 
 app = Flask(__name__)
 
-# XGBoost modelinizi yükleme
+# XGBoost modeli
 model = joblib.load("xgboost_tuned_model.pkl")
 
 @app.route('/')

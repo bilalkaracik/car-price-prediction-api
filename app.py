@@ -4,8 +4,14 @@ from xgboost import XGBRegressor
 
 app = Flask(__name__)
 
-# XGBoost modeli
-model = joblib.load("xgboost_tuned_model.pkl")
+class ModelService:
+    def __init__(self, model_path):
+        self.model = joblib.load(model_path)
+    
+    def predict(self, data):
+        return self.model.predict(data)
+
+model_service = ModelService("xgboost_tuned_model.pkl")
 
 @app.route('/')
 def root():
@@ -15,15 +21,14 @@ def root():
 def predict():
     try:
         data = request.get_json()
-        # Gelen veriyi modele uygun hale getirin, örneğin:
-        # text = data['text']
+        # Gelen veriyi modele uygun hale getirin
+        # Örnek: text = data['text']
         # dtest = xgb.DMatrix([[text]])
         
         # Tahmin
-        prediction = model.predict(dtest)[0]
+        prediction = model_service.predict(dtest)
 
         response = {
-            'text': text,
             'predicted_label': prediction
         }
 
